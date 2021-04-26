@@ -5,6 +5,8 @@ Installable PWA (Chrome only) here: https://a-j-bauer.github.io/thermo/
 
 For phones you need an OTG USB cable.
 
+![phone](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/phone.png)
+
 ![breadboard](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/breadboard.png)
 
 ![schematic](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/schematic.png)
