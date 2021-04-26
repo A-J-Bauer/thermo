@@ -1,0 +1,304 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="Description" content="the thermo app">
+    <meta name="theme-color" content="#0ca1a6" />
+    <link rel="apple-touch-icon" href="/img/icon-192.png">
+    <link rel="icon" href="/thermo/favicon.ico">
+    <link rel="manifest" href="/thermo/manifest.json" />
+
+    <title>thermo</title>
+
+    <style>
+
+        @font-face {
+            font-family: 'Roboto Mono';
+            font-style: normal;
+            font-weight: 400;
+            src: local('Roboto Mono'), url(RobotoMono-Regular.ttf) format('truetype');
+            font-display: swap;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            overscroll-behavior-y: contain;
+        }
+
+        html, body, div {
+            font-family: 'Roboto Mono', 'Courier New', monospace;           
+        }        
+
+        @media only screen and (min-width: 601px) {
+            td {
+                font-size: 14px;
+            }            
+        }                     
+
+        .btn {
+            background-color: #0ca1a6;
+            border: none;
+            padding: 0;
+            margin: 0;
+            width: 42px;
+            height: 42px;
+            cursor: pointer;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .btn:hover {
+                background-color: #20c3b4;
+            }
+        }
+
+        #c {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        #versionDiv {
+            position:absolute;
+            right:0;
+            top:0;
+            height:24px;
+            width:auto;
+            padding-right:4px;
+        }
+
+        #connectImg {
+            position: absolute;
+            display:none;
+            cursor:pointer;            
+        }
+
+        .tempDiv {
+            position: absolute;
+            left: 0;
+            display: none;
+            text-align: center;
+            color: #0ca1a6;
+            line-height: 1;
+        }
+
+      
+        
+    </style>
+</head>
+<body>
+    
+    <div id="c">
+        <div id="versionDiv"></div>
+        <img id="connectImg" src="img/thermo.svg" alt="thermo" />
+        <div id="celsiusDiv" class="tempDiv"></div>
+        <div id="fahrenheitDiv" class="tempDiv"></div>
+    </div>
+   
+    <script type="text/javascript" src="serial.js"></script>
+    <script type="text/javascript">
+
+        'use strict';
+
+        
+       
+        class Thermo {
+            constructor(connectImg, celsiusDiv, fahrenheitDiv) {
+                this.connectImg = connectImg;
+                this.celsiusDiv = celsiusDiv;
+                this.fahrenheitDiv = fahrenheitDiv;
+
+                this._serialOptions = { baudRate: 19200, dataBits: 8, stopBits: 1, parity: 'none' };
+                this._port = null;
+                this._reader = null;
+                this._textdecoder = new TextDecoder();               
+                
+                this.connectImg.addEventListener('click', e => {
+                    try {
+                        this._connect();
+                    } catch (e) {
+                        console.log(e);
+                    }
+                });
+
+                window.addEventListener('resize', this._resize);
+                this._resize();
+                this.connectImg.style.display = 'block';
+            }
+
+
+            async _resize() {
+                if (window.innerWidth > window.innerHeight) {
+                    const xovry = this.connectImg.width / this.connectImg.height;
+
+                    this.connectImg.height = xovry * window.innerHeight / 2;
+                    this.connectImg.width = this.connectImg.height * xovry;
+
+                    this.fahrenheitDiv.style.height = this.celsiusDiv.style.height = (xovry * window.innerHeight / 4).toString() + 'px';                    
+
+                } else {
+                    const yovrx = this.connectImg.height / this.connectImg.width;
+
+                    this.connectImg.width = yovrx * window.innerWidth / 2;
+                    this.connectImg.height = this.connectImg.width * yovrx;
+
+                    this.fahrenheitDiv.style.height = this.celsiusDiv.style.height = (yovrx * window.innerWidth / 4).toString() + 'px';                    
+                }
+
+                this.fahrenheitDiv.style.width = this.celsiusDiv.style.width = window.innerWidth + 'px';
+
+                this.connectImg.style.left = ((window.innerWidth - this.connectImg.width) / 2).toString() + 'px';
+                this.connectImg.style.top = ((window.innerHeight - this.connectImg.height) / 2).toString() + 'px';
+                                  
+                this.celsiusDiv.style.top = ((window.innerHeight - 3 * parseInt(this.celsiusDiv.style.height)) / 2).toString() + 'px';
+                
+                this.fahrenheitDiv.style.left = this.celsiusDiv.style.left;                
+                this.fahrenheitDiv.style.bottom = this.celsiusDiv.style.top;
+
+                this.fahrenheitDiv.style.fontSize = this.celsiusDiv.style.fontSize = parseFloat(this.fahrenheitDiv.style.height) + 'px';
+            }
+            
+                       
+            async _connect() {
+                if (this._port !== null && this._port.open) {
+                    if (this._reader !== null) {
+                        this._reader.cancel();
+                    }
+                    return;
+                }
+
+                this._port = null;
+
+                try {
+                    if ("serial" in navigator) {
+                        this._port = await navigator.serial.requestPort();
+                    } else if ("usb" in navigator) {
+                        this._port = await serial.requestPort();
+                    } else {
+                        console.log('neither serial nor usb is supported');
+                    }
+                } catch (e) {
+                    if (e.name === 'NotFoundError') {
+                        console.log('nothing selected - not connecting');
+                    } else {
+                        console.log(e);
+                    }
+                    this._port = null;
+                }
+
+
+                if (this._port != null) {
+                    try {
+                        await this._port.open(this._serialOptions);
+
+                        this.connectImg.style.display = 'none';
+                        this.celsiusDiv.style.display = 'block';
+                        this.fahrenheitDiv.style.display = 'block';
+
+                        console.log('port opened');
+
+                        try {
+                            await this._read();
+                        } catch { }
+
+                        try {
+                            await this._port.close();
+                        } catch { }
+
+                        this._port = null;
+
+                        this.connectImg.style.display = 'block';
+                        this.celsiusDiv.style.display = 'none';
+                        this.fahrenheitDiv.style.display = 'none';
+
+                        console.log('port closed');
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
+            }
+
+            async _read() {
+                try {
+                    let text = '';
+
+                    this._reader = this._port.readable.getReader();
+
+                    while (true) {
+                        const { value, done } = await this._reader.read();
+                        if (done) {
+                            this._reader.releaseLock();
+                            break;
+                        }
+
+                        const valueType = Object.prototype.toString.call(value);
+
+                        if (valueType === '[object Uint8Array]') {
+                            text += this._textdecoder.decode(value);
+                        } else if (valueType === '[object DataView]') {
+                            text += this._textdecoder.decode(new Uint8Array(value.buffer));
+                        }
+
+                        const lines = text.split('\r\n');
+                        for (let i = 0; i < lines.length - 1; i++) {
+                            this._showValues(lines[i]);
+                            text = text.substr(lines[i].length + 2);
+                        }
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+
+
+            async _showValues(value) {
+                const celsius = parseInt(value);
+                const fahrenheit = Math.round((celsius * 9 / 5) + 32);
+
+                this.celsiusDiv.innerHTML = celsius + '°C';
+                this.fahrenheitDiv.innerHTML = fahrenheit + '°F';
+
+            }
+
+        }
+
+
+        let thermo = new Thermo(
+            document.getElementById('connectImg'),
+            document.getElementById('celsiusDiv'),
+            document.getElementById('fahrenheitDiv')
+        );
+
+
+    </script>
+
+
+
+
+    <script type="text/javascript">
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.addEventListener('message', event => {
+                    if (event.data.msg && event.data.msg === 'version') {
+                        document.getElementById('versionDiv').innerHTML = 'v' + event.data.version;
+                    }
+                });
+
+                navigator.serviceWorker.register('/thermo/sw.js', { scope: '/thermo/' })
+                    .then(reg => {
+                        console.log('registered', reg);
+                    }).catch(err => {
+                        console.log('registration failed', err);
+                    });
+
+                navigator.serviceWorker.ready.then(reg => {
+                    reg.active.postMessage("version");
+                });
+            });
+        }
+    </script>
+</body>
+</html>
