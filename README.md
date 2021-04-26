@@ -11,8 +11,6 @@ For phones you need an OTG USB cable.
 
 ![schematic](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/schematic.png)
 
-![breadboard2](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/breadboard2.png)
-
 ![graph](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/graph.png)
 
 Arduino sketch:
