@@ -68,9 +68,10 @@ void loop() {
   RT = RKNOWN * (1023.0f / (float)a7 - 1.0f);
     
   for (int i=1; i < ARRAY_SIZE; i++) {
-    if (Array_RT[i] > RT){
+    if (Array_RT[i] < RT){
       Array_R_idx1 = i - 1;
       Array_R_idx2 = i;            
+      break;
     }
   }
     
