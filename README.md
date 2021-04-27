@@ -13,7 +13,11 @@ For phones you need an OTG USB cable.
 
 ![graph](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/graph.png)
 
-Arduino sketch:
+**Source Note:**
+The serial.js is a modified version of Google's Serial Polyfill from here https://github.com/google/web-serial-polyfill.
+The modified version helps to get the PWA to also works with Arduino clones on Android phones (Apple not tested).
+
+**Arduino sketch:**
 
 ```
 #define R25 470.0
