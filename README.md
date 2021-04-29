@@ -15,7 +15,7 @@ For phones you need an OTG USB cable.
 
 **Circuit Notes:**
 
-The circuit is a simple voltage divider where one of the resistors is a negative temperature coefficient (NTC) thermistor, meaning is will change resistance when it's temperature changes. The graph made from the datasheet's data shows that the resistance will get smaller as temperature rises (negative temp coefficient type). At 25°C the resistance of the NTC used here is 470Ω. To avoid self heating the current flowing through the thermistor is limited by the second resistor. I picked 4.7kΩ. Knowing that the resistance is measured in terms of voltage drop accross the NTC at a certain resolution (Nano 10bits, 1024 steps for 5V, 4.9 mV/step) and looking at the data graph leads to the conclusion that the accuracy will degrade as the temperature rises.
+The circuit is a simple voltage divider where one of the resistors is a negative temperature coefficient (NTC) thermistor, meaning it's resistance will get lower as it's temperature gets higher. At 25°C the resistance of the NTC used here is 470Ω. To avoid self heating the current flowing through the thermistor is limited by the second resistor. I picked 4.7kΩ. Knowing that the resistance is measured in terms of voltage drop accross the NTC at a certain resolution (Nano 10bits, 1024 steps for 5V, 4.9 mV/step) and looking at the data graph leads to the conclusion that the accuracy will degrade as the temperature rises.
 More info: [Wikipedia Thermistor](https://en.wikipedia.org/wiki/Thermistor)
 
 **Sensor Placement**
