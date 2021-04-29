@@ -1,6 +1,6 @@
-#define R25 470.0
-#define RKNOWN 470.0
-
+#define R25 470.0f
+#define RKNOWN 4700.0f
+#define RWIRE 0.2f
 #define ARRAY_SIZE 34
 
 // from datasheet
@@ -12,7 +12,7 @@ int a7;
 float RT;
 float T = -273.15;
 
-int Array_R_idx1, Array_R_idx2;
+int idx1, idx2;
 
 void setup() {
   Serial.begin(19200);
@@ -30,7 +30,7 @@ void setup() {
 
 void loop() {
   digitalWrite(LED_BUILTIN, HIGH);
-  delay(250);
+  delay(1000);
 
   a7 = analogRead(7); // 10 bit => a7 ε [0..1023]
 
@@ -43,28 +43,33 @@ void loop() {
   // => RT = 1023 * RKNOWN / a7 - RKNOWN
   // => RT = RKNOWN * (1023 / a7 - 1), a7 != 1023
   
-  RT = RKNOWN * (1023.0f / (float)a7 - 1.0f);
+  RT = RKNOWN * (1023.0f / (float)a7 - 1.0f) + RWIRE;
     
   for (int i=1; i < ARRAY_SIZE; i++) {
     if (Array_RT[i] < RT){
-      Array_R_idx1 = i - 1;
-      Array_R_idx2 = i;
-      break;
+      idx1 = i - 1;
+      idx2 = i;  
+      break;          
     }
   }
     
-  T = (Array_T[Array_R_idx2] - Array_T[Array_R_idx1]) / (Array_RT[Array_R_idx2] - Array_RT[Array_R_idx1]) * (RT - Array_RT[Array_R_idx1]) + Array_T[Array_R_idx1];    
+  T = (Array_T[idx2] - Array_T[idx1]) / (Array_RT[idx2] - Array_RT[idx1]) * (RT - Array_RT[idx1]) + Array_T[idx1];    
 
   /*Serial.print("a7: "); Serial.print(a7); Serial.print(" ");
-  Serial.print("idx1: "); Serial.print(Array_R_idx1); Serial.print(" ");
-  Serial.print("idx2: "); Serial.print(Array_R_idx2); Serial.print(" ");
+  Serial.print("RT: "); Serial.print(RT); Serial.print(" ");
+  Serial.print("idx1: "); Serial.print(idx1); Serial.print(" ");
+  Serial.print("idx2: "); Serial.print(idx2); Serial.print(" ");
+  Serial.print("Array_RT[idx1]: "); Serial.print(Array_RT[idx1]); Serial.print(" ");
+  Serial.print("Array_RT[idx2]: "); Serial.print(Array_RT[idx2]); Serial.print(" ");
+  Serial.print("Array_T[idx1]: "); Serial.print(Array_T[idx1]); Serial.print(" ");
+  Serial.print("Array_T[idx2]: "); Serial.print(Array_T[idx2]); Serial.print(" ");
   Serial.print("T: "); Serial.print(T); Serial.print(" ");
   Serial.print("round(T): "); Serial.print(round(T)); Serial.print(" ");*/
   Serial.println(round(T));
   
     
   digitalWrite(LED_BUILTIN, LOW);
-  delay(250);
+  delay(1000);
    
   
 }
