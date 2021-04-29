@@ -37,7 +37,7 @@ The modified version helps to get the PWA to also works with Arduino clones on A
 
 **Arduino sketch Notes:**
 
-Ths sketch measures the resistance of the NTC with 10bit resolution and then searches in the resistance values pulled from the NTC's datasheet to find the two values that match.
+Ths sketch measures the resistance of the NTC with 10bit resolution and then searches in the resistance values pulled from the NTC's datasheet to find the two values it falls in between.
 The indices of these values correspond to the values of the temperature array. From there a simple linear approximation is used to calculate the final temperature which then is rounded and sent to the serial ouput.
 
 ```
