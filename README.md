@@ -26,9 +26,11 @@ This will pick up the heat from the Microcontroller:
 
 ![bad sensor placement](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/badsensorplacement.png)
 
-This is decoupled much better (NTC is glued down):
+This is decoupled much better:
 
 ![better placement](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/betterplacement.png)
+
+Note: The pocket where the NTC is seated in is filled up with glue a little over the brim now so that the heat from outside transfers to the NTC better.
 
 
 **Source Note:**
