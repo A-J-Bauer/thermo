@@ -21,10 +21,13 @@ More info: [Wikipedia Thermistor](https://en.wikipedia.org/wiki/Thermistor)
 **Sensor Placement**
 
 The Arduino itself creates heat so the NTCs position and wire length should be chosen accoringly.
+
 So this will not work:
+
 ![bad sensor placement](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/badsensorplacement.png)
 
 This does work much better:
+
 ![better placement](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/betterplacement.png)
 
 
