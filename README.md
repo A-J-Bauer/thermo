@@ -1,23 +1,41 @@
 # thermo
 A simple DIY thermometer and PWA app.
 
+This is a little fun project using cheap components to build a thermometer that can be connected to a smart phone's or computer's USB interface.
+
 Installable PWA (Chrome only) here: https://a-j-bauer.github.io/thermo/
 
 For phones you need an OTG USB cable.
 
 ![phone](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/phone.png)
 
-![breadboard](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/breadboard.png)
-
-![schematic](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/schematic.png)
+![circuit](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/circuit.png)
 
 ![graph](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/graph.png)
+
+**Circuit Notes:**
+
+The circuit is a simple voltage divider where one of the resistors is a negative temperature coefficient (NTC) thermistor, meaning is will change resistance when it's temperature changes. The graph made from the datasheet's data shows that the resistance will get smaller as temperature rises (negative temp coefficient type). At 25°C the resistance of the NTC used here is 470Ω. To avoid self heating the current flowing through the thermistor is limited by the second resistor. I picked 4.7kΩ. Knowing that the resistance is measured in terms of voltage drop accross the NTC at a certain resolution (Nano 10bits, 1024 steps for 5V, 4.9 mV/step) and looking at the data graph leads to the conclusion that the accuracy will degrade as the temperature rises.
+More info: [Wikipedia Thermistor](https://en.wikipedia.org/wiki/Thermistor)
+
+**Sensor Placement**
+
+The Arduino itself creates heat so the NTCs position and wire length should be chosen accoringly.
+So this will not work:
+![bad sensor placement](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/badsensorplacement.png)
+
+This does work much better:
+![better placement](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/betterplacement.png)
+
 
 **Source Note:**
 The serial.js is a modified version of Google's Serial Polyfill from here https://github.com/google/web-serial-polyfill.
 The modified version helps to get the PWA to also works with Arduino clones on Android phones (Apple not tested).
 
-**Arduino sketch:**
+**Arduino sketch Notes:**
+
+Ths sketch measures the resistance of the NTC with 10bit resolution and then searches in the resistance values pulled from the NTC's datasheet to find the two values that match.
+The indices of these values correspond to the values of the temperature array. From there a simple linear approximation is used to calculate the final temperature which then is rounded and sent to the serial ouput.
 
 ```
 #define R25 470.0f
