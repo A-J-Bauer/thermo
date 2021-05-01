@@ -7,6 +7,8 @@ Installable PWA (Chrome only) here: https://a-j-bauer.github.io/thermo/
 
 For phones you need an OTG USB cable.
 
+![phone with otg cable](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/phoneotg.png)
+
 ![phone](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/phone.png)
 
 ![circuit](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/circuit.png)
@@ -30,7 +32,7 @@ This is decoupled much better:
 
 ![better placement](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/betterplacement.png)
 
-Note: The pocket where the NTC is seated in is filled up with glue a little over the brim now so that the heat from outside transfers to the NTC better.
+Note: The pocket where the NTC is seated in is filled up with glue a little over the brim now so that the heat from outside transfers to the NTC a little bit better/faster.
 
 
 **Source Note:**
