@@ -9,9 +9,9 @@ For phones you need an OTG USB cable.
 
 ![phone with otg cable](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/phoneotg.png)
 
-![phone](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/phone.png)
-
 ![circuit](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/circuit.png)
+
+![phone](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/phone.png)
 
 ![graph](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/graph.png)
 
