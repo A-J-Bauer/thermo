@@ -28,7 +28,7 @@ The first design picked up the heat from the Microcontroller:
 
 ![bad sensor placement](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/badsensorplacement.png)
 
-This is decoupled much better:
+The second design decouples from the Arduino's heat much better:
 
 ![better placement](https://github.com/A-J-Bauer/thermo/blob/main/readme_img/betterplacement.png)
 
