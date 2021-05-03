@@ -88,7 +88,7 @@ void loop() {
   // a7 = 1023 * RKNOWN / (RT + RKNOWN)
   // => (RT + RKNOWN) = 1023 * RKNOWN / a7
   // => RT = 1023 * RKNOWN / a7 - RKNOWN
-  // => RT = RKNOWN * (1023 / a7 - 1), a7 != 1023
+  // => RT = RKNOWN * (1023 / a7 - 1)
   
   RT = RKNOWN * (1023.0f / (float)a7 - 1.0f) + RWIRE;
     
